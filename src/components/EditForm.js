@@ -60,14 +60,7 @@ const EditForm = ({theEmployee}) => {
         <div id="addKPI">
 				<form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>KPI NAME</label>
-                        <input id="kpi"
-                                type="text" 
-                                className="form-control" 
-                                name="kpi_name" 
-                                // value={theEmployee.kpi_name} 
-                                disabled
-                                />
+                        <label>{theEmployee.kpi_name}</label>
                     </div>
                     <div className="form-group">
                         <label>January</label>
