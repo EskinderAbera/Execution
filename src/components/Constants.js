@@ -1,0 +1,1 @@
+export const url ="https://bsc-newapi.herokuapp.com/bsc"
