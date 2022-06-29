@@ -5,25 +5,35 @@ const APIContext = createContext();
 
 export function APIContextProvider({ children }) {
   const [kpis, setKpis] = useState([]);
+  const [ loading, setLoading ] = useState(true);
+
   useEffect(() => {
+    
     async function fetchData() {
       const { data } = await axios.get(
         `https://bsc-newapi.herokuapp.com/bsc/kpi/`
       );
       setKpis(data);
+      setLoading(false);
     }
     fetchData();
   }, []);
 
   const updateKpi = (kpi_id, updatedKpi) => {
         setKpis(kpis.map((kpi) => kpi.kpi_id === kpi_id ? updatedKpi : kpi))
-    }
+  }
+
+  const deleteKpi = (kpi_id) => {
+    setKpis(kpis.filter(kpi => kpi.kpi_id !== kpi_id))
+  }
 
   return (
+    loading ? <h2>Loading.....</h2> :
     <APIContext.Provider
       value={{
         kpis,
-        updateKpi
+        updateKpi,
+        deleteKpi
       }}
     >
       {children}
@@ -39,32 +49,5 @@ export function useAPI() {
   }
   return context;
 }
-
-
-
-
-
-// const sortedEmployees = employees.sort((a,b)=>(a.name < b.name ? -1 : 1));
-
-
-
-
-
-// const deleteEmployee = (id) => {
-//     setEmployees(employees.filter(employee => employee.id !== id))
-// }
-
-// const updateEmployee = (id, updatedEmployee) => {
-//     setEmployees(employees.map((employee) => employee.id === id ? updatedEmployee : employee))
-// }
-
-    // return (
-//         <EmployeeContext.Provider value={{kpis}}>
-//             {props.children}
-//         </EmployeeContext.Provider>
-//     )
-// }
-
-// export default EmployeeContextProvider;
 
 

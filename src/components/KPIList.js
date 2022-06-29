@@ -1,44 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Alert} from 'react-bootstrap';
 import KPI from "./KPI"
 import Pagination from './Pagination';
 import { useAPI } from "../contexts/KPIContext";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { injectStyle } from "react-toastify/dist/inject-style";
 
+if (typeof window !== "undefined") {
+    injectStyle();
+  }
 
 const KPIList = () => {
     const { kpis } = useAPI();
-    const [loading, setLoading] = useState(false)
-
-    const [showAlert, setShowAlert] = useState(false);
 	const [show, setShow] = useState(false);
-
-	const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [employeesPerPage] = useState(2)
-
-    const handleShowAlert = () => {
-        setShowAlert(true);
-        setTimeout(()=> {
-            setShowAlert(false);
-        }, 2000)
-    }
+    const [employeesPerPage] = useState(6)
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredKpis, setFilteredKpis] = useState(kpis);
+    
     useEffect(() => {
         handleClose();
-
-        return () => {
-            handleShowAlert();
-        }
     }, [kpis])
+
+    useEffect(() => {
+        const newkpis = kpis.filter(kpi =>
+          kpi.kpi_name
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
+        );
+        setFilteredKpis(newkpis);
+        return (
+            handleClose()
+        )
+      }, [searchTerm, kpis]);
 
     const indexOfLastEmployee = currentPage * employeesPerPage;
     const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-    const currentEmployees = kpis.slice(indexOfFirstEmployee, indexOfLastEmployee);
-    const totalPagesNum = Math.ceil(kpis.length / employeesPerPage);
+    const currentEmployees = filteredKpis.slice(indexOfFirstEmployee, indexOfLastEmployee);
+    const totalPagesNum = Math.ceil(filteredKpis.length / employeesPerPage);
 
     return (
         <>
+        <div className="row g-3 align-items-center"> 
+            <div className="col-auto">
+                <input type="text" 
+                        className="form-control" 
+                        placeholder="Search...." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+        </div>
+        <div className="mb-5">
+
+        </div>
         <div className="table-title">
 				<div className="row">
 					<div className="col-sm-6">
@@ -47,9 +64,7 @@ const KPIList = () => {
 				</div>
 			</div>
 
-            <Alert show={showAlert} variant="success">
-                KPI Added Succefully!
-            </Alert>
+        <ToastContainer />
         <table className="table table-striped table-hover">
         <thead>
             <tr>
@@ -58,26 +73,29 @@ const KPIList = () => {
                 <th>KPI Name</th>
                 <th>KPI Weight</th>
                 <th>KPI Target</th>
-                <th>Actual Aggregate</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-                {
-                   
-                    currentEmployees.map(kpi => (
-                        <tr key={kpi.kpi_id}>
-                            <KPI kpi={kpi}/>
-                        </tr>
-                    ))
-                }
+            {
+                filteredKpis.length === kpis.length ? currentEmployees.map(kpi => (
+                    <tr key={kpi.kpi_id} >
+                        <KPI kpi={kpi} />
+                    </tr>
+                )) :
+                filteredKpis.map(kpi => (
+                    <tr key={kpi.kpi_id} >
+                        <KPI kpi={kpi} />
+                    </tr>
+                ))
+            }
         </tbody>
         </table>
 
         <Pagination pages = {totalPagesNum}
-                setCurrentPage={setCurrentPage}
-                currentEmployees ={currentEmployees}
-                kpis = {kpis} />
+            setCurrentPage={setCurrentPage}
+            currentEmployees ={currentEmployees}
+            kpis = {filteredKpis} />
         </>
     )
 }
