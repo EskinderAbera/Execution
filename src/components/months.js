@@ -9,7 +9,7 @@ function Months (props){
         if(props.theEmployee[arr[i]] >'0'){
             
             arr.splice(i,1);
-            i=0;
+            i=-1;
             
         }
     } 

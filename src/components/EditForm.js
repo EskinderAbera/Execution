@@ -158,6 +158,7 @@ const EditForm = ({theEmployee}) => {
         })
         .catch((error) => {
             handleError(error.response.data['Error']);
+            changeActual(0);
           });
     }
 
