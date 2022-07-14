@@ -65,7 +65,7 @@ const LandingPage = () => {
                 <div className="form-group">
                   <select id='KPI' className="form-control selecting" onChange={(e)=>handleChange(e)}>
                     <option>Select....</option>
-                    <option value="bsc">corporate</option>
+                    {/* <option value="bsc">corporate</option> */}
                     <option value="operation">Banking Operation Process</option>
                     <option value="corporate">Corporate Banking Operation</option>
                     <option value="cooperative">Cooperative Banking Operation</option>
@@ -74,7 +74,7 @@ const LandingPage = () => {
                     <option value="hc">HC and Projects Management</option>
                     <option value="internal">Internal Audit Process</option>
                     <option value="ifb">IFB Process</option>
-                    <option value="is">IS Process</option>
+                    {/* <option value="is">IS Process</option> */}
                     <option value="legal">Legal Services</option>
                     <option value="bod">BOD Secretary</option>
                     <option value="risk">Risk and Compliance</option>
