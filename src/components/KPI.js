@@ -13,7 +13,7 @@ const KPI = ({kpi}) => {
     const handleClose = () => setShow(false);
     const showDetail = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
-    const {deleteKpi} = useAPI();
+    const {deleteKpi,numberofMonthsLeft,changeNumberofMonthsLeft} = useAPI();
 
 
     const handleDelete = (kpi_id) => {
@@ -27,6 +27,7 @@ const KPI = ({kpi}) => {
 
     useEffect(() => {
         handleClose()
+        // changeNumberofMonthsLeft(kpi.kpi_months_left);
     }, [kpi])
 
     return (
@@ -39,14 +40,14 @@ const KPI = ({kpi}) => {
         <td>
             <div style={{display:"flex", flexDirection:"row" }}>
 
-            <OverlayTrigger
+            {/* <OverlayTrigger
                 overlay={
                     <Tooltip id={`tooltip-top`}>
                     Detail
                     </Tooltip>
                 }>
                 <button onClick={showDetail} className="btn  btn-act row" data-toggle="modal"><i className="material-symbols-outlined">visibility</i></button>
-            </OverlayTrigger>
+            </OverlayTrigger> */}
 
             <OverlayTrigger
                 overlay={
@@ -58,11 +59,11 @@ const KPI = ({kpi}) => {
                 </OverlayTrigger>
             <OverlayTrigger
                 overlay={
-                    <Tooltip id={`tooltip-top`}>
-                        Delete
+                    <Tooltip id={`tooltip-top`} >
+                        <span style={{color:'orange'}}>months left </span>
                     </Tooltip>
                 }>
-                <button onClick={() => handleDelete(kpi.kpi_id)} className="btn  btn-act row" style={{color:"black"}} data-toggle="modal"><i className="material-icons">&#xE872;</i></button>
+                <button className="btn  btn-act row" style={{color:"black", marginLeft: '10px'}} data-toggle="modal">{kpi.numberOfmonthsLeft}</button>
             </OverlayTrigger>
             
             </div>
@@ -87,7 +88,7 @@ const KPI = ({kpi}) => {
         <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header>
             <Modal.Title>
-                KPI
+                {kpi.kpi_name}
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>

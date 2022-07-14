@@ -1,1 +1,2 @@
-export const url ="https://bsc-newapi.herokuapp.com/bsc"
+export const url ="https://bsc-newapi.herokuapp.com"
+export const baseUrl = "http://localhost:8000/bsc"

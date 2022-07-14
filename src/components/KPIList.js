@@ -5,13 +5,14 @@ import { useAPI } from "../contexts/KPIContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { injectStyle } from "react-toastify/dist/inject-style";
+import './KPIList.css'
 
 if (typeof window !== "undefined") {
     injectStyle();
   }
 
 const KPIList = () => {
-    const { kpis } = useAPI();
+    const { kpis, changeNumberofMonthsLeft } = useAPI();
 	const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
@@ -25,12 +26,14 @@ const KPIList = () => {
     }, [kpis])
 
     useEffect(() => {
+        
         const newkpis = kpis.filter(kpi =>
           kpi.kpi_name
             .toLowerCase()
             .includes(searchTerm.toLowerCase()),
         );
         setFilteredKpis(newkpis);
+        
         return (
             handleClose()
         )
@@ -42,7 +45,9 @@ const KPIList = () => {
     const totalPagesNum = Math.ceil(filteredKpis.length / employeesPerPage);
 
     return (
-        <>
+        <div className="container-xl">
+        <div className="table-responsive">
+          <div className="table-wrapper">
         <div className="row g-3 align-items-center"> 
             <div className="col-auto">
                 <input type="text" 
@@ -78,12 +83,15 @@ const KPIList = () => {
         </thead>
         <tbody>
             {
-                filteredKpis.length === kpis.length ? currentEmployees.map(kpi => (
+                
+            filteredKpis.length === kpis.length ? currentEmployees.filter((kpi, index) => kpi.kpi_weight > '0').
+                map((kpi, index) => (
                     <tr key={kpi.kpi_id} >
                         <KPI kpi={kpi} />
                     </tr>
                 )) :
-                filteredKpis.map(kpi => (
+                filteredKpis.filter((kpi, index) => kpi.kpi_weight > '0').
+                map((kpi, index) => (
                     <tr key={kpi.kpi_id} >
                         <KPI kpi={kpi} />
                     </tr>
@@ -96,7 +104,11 @@ const KPIList = () => {
             setCurrentPage={setCurrentPage}
             currentEmployees ={currentEmployees}
             kpis = {filteredKpis} />
-        </>
+
+</div>
+        </div>
+        </div>
+    
     )
 }
 export default KPIList;

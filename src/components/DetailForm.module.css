@@ -1,0 +1,35 @@
+.button{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container {
+    flex: auto;
+    justify-content: 'center';
+    align-items: 'center';
+}
+.image {
+    
+    padding-left: '10px';
+    resize: 'contain';
+}
+
+.textCenter {
+    text-align: 'center';
+    margin-right: 50%;
+}
+
+.row {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.column {
+    flex-direction: colomun;
+    align-items: center;
+    width: 100%;
+    /* align: 'center',
+    width: '50%',
+    // borderWidth: 1,
+    // borderColor: 'blue', */
+  }

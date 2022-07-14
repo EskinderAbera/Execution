@@ -1,29 +1,57 @@
+import styles from './DetailForm.module.css'
+
 const DetailForm = ({theEmployee}) => {
     return (
-    <div id="addKPI">
-        <div className="form-group">
-            <label>KPI Name</label>
-            <h4>{theEmployee.kpi_name}</h4>
-        </div><br/>
-        <div className="form-group">
-            <label>Perspective</label>
-            <h4>{theEmployee.perspective}</h4>
-        </div>
-        <div className="form-group"><br/>
-            <label>KPI Objective</label>
-            <h4>{theEmployee.objective}</h4>
-        </div>
-        <div className="form-group"><br/>
-            <label>KPI Weight</label>
-            <h4>{theEmployee.kpi_weight}</h4>
-        </div>
-        <div className="form-group"><br/>
-            <label>KPI Target</label>
-            <h4>{theEmployee.kpi_target}</h4>
-        </div>
-        <div className="form-group"><br/>
-            <label>KPI Aggregate</label>
-            <h4>{theEmployee.aggregate}</h4>
+    <div className={styles.container}>
+        <div className={styles.row}>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>January</text>
+                <button className={styles.image}>{theEmployee.January}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>February</text>
+                <button className={styles.image}>{theEmployee.February}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>March</text>
+                <button className={styles.image}>{theEmployee.March}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>April</text>
+                <button className={styles.image}>{theEmployee.April}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>May</text>
+                <button className={styles.image}>{theEmployee.May}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>June</text>
+                <button className={styles.image}>{theEmployee.June}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>July</text>
+                <button className={styles.image}>{theEmployee.July}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>August</text>
+                <button className={styles.image}>{theEmployee.August}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>September</text>
+                <button className={styles.image}>{theEmployee.September}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>October</text>
+                <button className={styles.image}>{theEmployee.October}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>November</text>
+                <button className={styles.image}>{theEmployee.November}</button>
+            </div>
+            <div className={styles.column}>
+                <text className={styles.textCenter}>December</text>
+                <button className={styles.image}>{theEmployee.December}</button>
+            </div>
         </div>
     </div>
     )
