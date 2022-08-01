@@ -6,8 +6,7 @@ function Months (props){
     const {actual, changeActual, changeMonth,month, changeNumberofMonthsLeft} = useAPI();
     var arr = props.monthName;
     for(var i =0; i<arr.length; i++){
-        if(props.theEmployee[arr[i]] >'0'){
-            
+        if(props.theEmployee[arr[i]] > '0'){
             arr.splice(i,1);
             i=-1;
             

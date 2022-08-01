@@ -9,7 +9,7 @@ import Months from "./months";
 
 const EditForm = ({theEmployee}) => {
     const kpi_id = theEmployee.kpi_id
-    const { updateKpi, month, actual, changeActual,changeMonth, setKpis, setLoading, base} = useAPI();
+    const { updateKpi, month, actual, changeActual,changeMonth, setKpis, setLoading, base, department} = useAPI();
     const [kpi_name, setKpiName] = useState(theEmployee.kpi_name)
     const [perspective, setKpiPerspective] = useState(theEmployee.perspective)
     const [objective, setKpiObjective] = useState(theEmployee.objective)
@@ -100,9 +100,7 @@ const EditForm = ({theEmployee}) => {
         }else if(month === "June"){
             datas = {
                 "June":actual
-            }
-            
-            
+            }          
             june.current = actual
             June = june.current
         }else if(month === "July"){
@@ -122,7 +120,8 @@ const EditForm = ({theEmployee}) => {
                 "September":actual
             }
             
-            console.log(September)
+            september.current = actual
+            September = september.current
         }else if(month === "October"){
             datas = {
                 "October":actual
@@ -147,19 +146,35 @@ const EditForm = ({theEmployee}) => {
         numberOfmonthsLeft = numberOfmonthsLeft.toString()
         
         const updatedKpi = { kpi_id, kpi_name, perspective, objective, kpi_weight, kpi_target, kpi_unit_measurement,January,February,March,April,May,June,July,August,September,October,November,December, numberOfmonthsLeft };
-        axios
-        .post(`${url}/${base}/add/actual/kpi/${theEmployee.kpi_name}/`, datas)
-        .then((response) => {
-            if (response.status === 200) {
-                handleSuccess(response.data);
-                updateKpi(theEmployee.kpi_id, updatedKpi)
+        if(department === 'Director'){
+            axios
+            .post(`${url}/director/add/actual/kpi/${theEmployee.kpi_name}/`, datas)
+            .then((response) => {
+                if (response.status === 200) {
+                    handleSuccess(response.data);
+                    updateKpi(theEmployee.kpi_id, updatedKpi)
+                    changeActual(0);
+                }
+            })
+            .catch((error) => {
+                handleError(error.response.data['Error']);
                 changeActual(0);
-            }
-        })
-        .catch((error) => {
-            handleError(error.response.data['Error']);
-            changeActual(0);
-          });
+              });
+        } else {
+            axios
+            .post(`${url}/${base}/add/actual/kpi/${theEmployee.kpi_name}/`, datas)
+            .then((response) => {
+                if (response.status === 200) {
+                    handleSuccess(response.data);
+                    updateKpi(theEmployee.kpi_id, updatedKpi)
+                    changeActual(0);
+                }
+            })
+            .catch((error) => {
+                handleError(error.response.data['Error']);
+                changeActual(0);
+            });
+        }
     }
 
     return (

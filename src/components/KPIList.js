@@ -12,14 +12,18 @@ if (typeof window !== "undefined") {
   }
 
 const KPIList = () => {
-    const { kpis, changeNumberofMonthsLeft } = useAPI();
+    const { kpis } = useAPI();
 	const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [employeesPerPage] = useState(6)
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredKpis, setFilteredKpis] = useState(kpis);
+
+    const filteringkpis = kpis.filter(kpi => 
+        kpi.kpi_weight > '0');
+
+    const [filteredKpis, setFilteredKpis] = useState(filteringkpis);
     
     useEffect(() => {
         handleClose();
@@ -27,7 +31,7 @@ const KPIList = () => {
 
     useEffect(() => {
         
-        const newkpis = kpis.filter(kpi =>
+        const newkpis = filteringkpis.filter(kpi =>
           kpi.kpi_name
             .toLowerCase()
             .includes(searchTerm.toLowerCase()),
@@ -46,67 +50,67 @@ const KPIList = () => {
 
     return (
         <div className="container-xl">
-        <div className="table-responsive">
-          <div className="table-wrapper">
-        <div className="row g-3 align-items-center"> 
-            <div className="col-auto">
-                <input type="text" 
-                        className="form-control" 
-                        placeholder="Search...." 
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                />
-            </div>
-        </div>
-        <div className="mb-5">
+            <div className="table-responsive">
+                <div className="table-wrapper">
+                    <div className="row g-3 align-items-center"> 
+                        <div className="col-auto">
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Search...." 
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-5"></div>
+                    <div className="table-title">
+				        <div className="row">
+					        <div className="col-sm-6">
+						        <h2>Edit <b>KPIs</b></h2>
+					        </div>
+				        </div>
+			        </div>
 
-        </div>
-        <div className="table-title">
-				<div className="row">
-					<div className="col-sm-6">
-						<h2>Edit <b>KPIs</b></h2>
-					</div>
-				</div>
-			</div>
-
-        <ToastContainer />
-        <table className="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Perspective</th>
-                <th>Objective</th>
-                <th>KPI Name</th>
-                <th>KPI Weight</th>
-                <th>KPI Target</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {
+                    <ToastContainer />
+                    <table className="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Perspective</th>
+                                <th>Objective</th>
+                                <th>KPI Name</th>
+                                <th>KPI Weight</th>
+                                <th>KPI Target</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
                 
-            filteredKpis.length === kpis.length ? currentEmployees.filter((kpi, index) => kpi.kpi_weight > '0').
-                map((kpi, index) => (
-                    <tr key={kpi.kpi_id} >
-                        <KPI kpi={kpi} />
-                    </tr>
-                )) :
-                filteredKpis.filter((kpi, index) => kpi.kpi_weight > '0').
-                map((kpi, index) => (
-                    <tr key={kpi.kpi_id} >
-                        <KPI kpi={kpi} />
-                    </tr>
-                ))
-            }
-        </tbody>
-        </table>
+                                filteredKpis.length === kpis.length ? currentEmployees.filter((kpi, index) => kpi.kpi_weight > '0').
+                                    map((kpi, index) => (
+                                        <tr key={kpi.kpi_id} >
+                                            <KPI kpi={kpi} />
+                                        </tr>
+                                    )) :
+                                    filteredKpis.filter((kpi, index) => kpi.kpi_weight > '0').
+                                    map((kpi, index) => (
+                                        <tr key={kpi.kpi_id} >
+                                            <KPI kpi={kpi} />
+                                        </tr>
+                                    ))
+                            }
+                        </tbody>
+                    </table>
 
-        <Pagination pages = {totalPagesNum}
-            setCurrentPage={setCurrentPage}
-            currentEmployees ={currentEmployees}
-            kpis = {filteredKpis} />
+                    <Pagination pages = {totalPagesNum}
+                        setCurrentPage={setCurrentPage}
+                        currentEmployees ={currentEmployees}
+                        kpis = {filteredKpis} 
+                    />
 
-</div>
-        </div>
+                </div>
+            </div>
         </div>
     
     )

@@ -10,9 +10,14 @@ export function APIContextProvider({ children }) {
   const [month, setMonth] = useState("m")
   const [numberofMonthsLeft, setNumberofMonthsLeft] = useState(0);
   const [base, setBase] = useState("")
+  const [department, setDepartment] = useState('')
 
   const changeBase = (dept) => {
     setBase(dept)
+  }
+
+  const changeDepartment = (dept) => {
+    setDepartment(dept)
   }
 
   const changeKPIs = (KPIs) => {
@@ -74,6 +79,8 @@ export function APIContextProvider({ children }) {
         changeKPIs,
         changeBase,
         base,
+        changeDepartment,
+        department
       }}
     >
       {children}
