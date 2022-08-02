@@ -67,18 +67,19 @@ const LandingPage = () => {
         <div className="form-group">
           <select id='KPI' className="form-control selecting" onChange={(e)=>handleChange(e)}>
             <option>Select....</option>
-            <option value="operation">Banking Operation Process</option>
+            <option value="bsc">President Level Scorecard</option>
+            {/* <option value="operation">Banking Operation Process</option> */}
             {/* <option value="corporate">Corporate Banking Operation</option> */}
-            <option value="cooperative">Cooperative Banking Operation</option>
-            {/* <option value="credit">Credit Appraisal Process</option>
-            <option value="finance">Finance and Facility Process</option>
-            <option value="hc">HC and Projects Management</option>
-            <option value="internal">Internal Audit Process</option>
-            <option value="ifb">IFB Process</option>
-            <option value="legal">Legal Services</option>
+            {/* <option value="cooperative">Cooperative Banking Operation</option> */}
+            {/* <option value="credit">Credit Appraisal Process</option> */}
+            {/* <option value="finance">Finance and Facility Process</option> */}
+            {/* <option value="hc">HC and Projects Management</option> */}
+            {/* <option value="internal">Internal Audit Process</option> */}
+            {/* <option value="ifb">IFB Process</option> */}
+            {/* <option value="legal">Legal Services</option> */}
             <option value="bod">BOD Secretary</option>
-            <option value="risk">Risk and Compliance</option> */}
-            <option value="strategy">Strategy and Marketing</option>
+            {/* <option value="risk">Risk and Compliance</option> */}
+            {/* <option value="strategy">Strategy and Marketing</option> */}
             {/* <option value="tech">Tech and Digital Process</option> */}
           </select>
         </div>
