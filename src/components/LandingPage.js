@@ -17,92 +17,104 @@ const FadeIn = styled.div`animation: 2s ${keyframes `${fadeIn}`} infinite`;
 const LandingPage = () => {
 
   let navigate = useNavigate();
-  const { changeKPIs, changeBase, changeDepartment, department} = useAPI();
+  const { changeKPIs, changeBase, changeDepartment, department, depts, roles, subdepts, base} = useAPI();
   const [loading, setLoading] = useState(false)
+  const [deptId, setDeptId] = useState('')
+
+  const [isSubDept, setIsSubDept] = useState(false)
+  const [Departmente, setDepartmente] = useState('')
 
   const handleDepartment = (e) => {
+    const s = e.target.value
     changeDepartment(e.target.value)
-  }
-  
-  const handleChange = (e) => {
-    const bases = e.target.value
-    changeBase(e.target.value)
-    setLoading(true)
-    
-    if(department === 'Director'){
+
+    if (s === 'admin'){
+      setLoading(true)
       axios
-      .get(`${url}/director/kpi/${bases}/`)
+      .get(`http://localhost:8000/bsc/ceo/kpi/${s}/`)
       .then((response) => {
         if (response.status == 200) {
-            console.log(department)
-            changeKPIs(response.data)
-            navigate(`/kpi`);
-            setLoading(false)
+          changeKPIs(response.data)
+          navigate(`/kpi`);
+          setLoading(false)
         }
       })
       .catch((error) => {
           alert(error.response.data['Error']);
           setLoading(false)
       });
-    } else {
-        axios
-        .get(`${url}/${bases}/kpi/`)
-        .then((response) => {
-          if (response.status == 200) {
-              changeKPIs(response.data)
-              navigate(`/kpi`);
-              setLoading(false)
-          }
-        })
-        .catch((error) => {
-            alert(error.response.data['Error']);
-            setLoading(false)
-        });
-    }
-  } 
 
-  const Dropdown = () => {
+    } 
+  }
+
+  const handleChange = (e) => {
+    changeBase(e.target.value)
+
     if (department === 'Vice President'){
-      return (
-        <div className="form-group">
-          <select id='KPI' className="form-control selecting" onChange={(e)=>handleChange(e)}>
-            <option>Select....</option>
-            <option value="bsc">President Level Scorecard</option>
-            {/* <option value="operation">Banking Operation Process</option> */}
-            {/* <option value="corporate">Corporate Banking Operation</option> */}
-            {/* <option value="cooperative">Cooperative Banking Operation</option> */}
-            {/* <option value="credit">Credit Appraisal Process</option> */}
-            {/* <option value="finance">Finance and Facility Process</option> */}
-            {/* <option value="hc">HC and Projects Management</option> */}
-            {/* <option value="internal">Internal Audit Process</option> */}
-            {/* <option value="ifb">IFB Process</option> */}
-            {/* <option value="legal">Legal Services</option> */}
-            <option value="bod">BOD Secretary</option>
-            {/* <option value="risk">Risk and Compliance</option> */}
-            {/* <option value="strategy">Strategy and Marketing</option> */}
-            {/* <option value="tech">Tech and Digital Process</option> */}
-          </select>
-        </div>
-      )
-    } else if(department === 'Director'){
-      return (
-        <div className="form-group">
-          <select id='KPI' className="form-control selecting" onChange={(e)=>handleChange(e)}>
-            <option>Select....</option>
-            {/* <option value="bsc">corporate</option> */}
-            <option value="cooperativesdirector">Cooperatives Customers Relationship Management</option>
-            <option value="agriculturaldirector">Agricultural Banking Customers Relationship Management </option>
-            <option value="cooperativedirector">Cooperative and Agricultural banking Capacity Building and Advisory Services </option>
-            <option value="operationsdirector">Operations and Business Support</option>
-            <option value="customerdirector">Customer Experience</option>
-            <option value="districtdirector">District Office</option>
-            <option value="strategydirector">Strategy Management and Transformation</option>
-            <option value="performancedirector">Performance Monitoring and Change Management</option>
-            <option value="marketdirector">Market Research and Business Communications </option>
-          </select>
-        </div>
-      )
+      const bases = e.target.value
+      setLoading(true)
+      axios
+      .get(`http://localhost:8000/bsc/vp/kpi/${bases}/`)
+      .then((response) => {
+        if (response.status == 200) {
+          changeKPIs(response.data)
+          navigate(`/kpi`);
+          setLoading(false)
+        }
+      })
+      .catch((error) => {
+          alert(error.response.data['Error']);
+          setLoading(false)
+      });
+    } else if (department === 'director'){
+      setIsSubDept(true)
+      {depts.filter(item => item.dept_name === e.target.value).map(dept => {
+        setDeptId(dept.dept_id)
+      })}
+      setDepartmente(e.target.value)
     }
+  }
+
+  const handleSubDeptChange = (e) => {
+    const bases = e.target.value
+    changeBase(e.target.value)
+    setLoading(true)
+    axios
+      .get(`http://localhost:8000/bsc/dir/kpi/${Departmente}/${bases}/`)
+      .then((response) => {
+        if (response.status == 200) {
+          changeKPIs(response.data)
+          navigate(`/kpi`);
+          setLoading(false)
+        }
+      })
+      .catch((error) => {
+          alert(error.response.data['Error']);
+          setLoading(false)
+      });
+  }
+
+  // useEffect(() => {
+  //   console.log(deptId)
+  // }, [deptId])
+
+  const SubDeptDropDown = () => {
+    return (
+      <div className="form-group">
+        <select id='KPI' className="form-control selecting" onChange={(e) => handleSubDeptChange(e)}>
+          <option>Select....</option>
+          {
+            ( subdepts && subdepts.length > 0 ) ? 
+            subdepts.filter((item, index) => item.department === deptId).
+            map((subdept, index) => (
+              <option key = {subdept.id} value={subdept.name}>
+                {subdept.name}
+              </option>
+            )) : null
+          }
+        </select>
+      </div>
+    )
   }
 
   return (
@@ -133,14 +145,39 @@ const LandingPage = () => {
                   <div className="form-group">
                     <select id='KPI' className="form-control selecting" onChange={(e)=>handleDepartment(e)}>
                       <option>Select....</option>
-                      <option>President</option>
-                      <option>Vice President</option>
-                      <option>Director</option>
+                      {
+                        ( roles && roles.length > 0 ) ? 
+                        roles.
+                        map((role, index) => (
+                          <option key = {role.role_id} value={role.role_name}>
+                            {role.role_name}
+                          </option>
+                        )) : null
+                      }
                     </select>
                   </div>
                 </div>
                 <div className="cta">
-                  <Dropdown />
+                   {
+                    (department === 'Vice President' || department === 'director') ? 
+                    <div className="form-group">
+                    <select id='KPI' className="form-control selecting" onChange={(e) => handleChange(e)}>
+                      <option>Select....</option>
+                      {
+                        ( depts && depts.length > 0 ) ? 
+                        depts.
+                        map((dept, index) => (
+                          <option key = {dept.dept_id} value={dept.dept_name}>
+                            {dept.dept_name}
+                          </option>
+                        )) : null
+                      }
+                    </select>
+                  </div>
+                  : null
+                    
+                  }
+                  { isSubDept ? <SubDeptDropDown /> : null}
                 </div>
               </div>
 
