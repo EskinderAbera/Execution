@@ -179,14 +179,13 @@ const EditForm = ({theEmployee}) => {
 
     return (
         <div>
-                        <Months theEmployee={theEmployee} monthName={months} monthSet={month}/>
-                        <div className="form-group" style={{textAlign: "right"}}>
-                        <button variant="success" type="submit" block="true" onClick={editKpi}>
-                            Edit KPI
-                        </button>
-                    </div>
-                    </div>
-                       
+            <Months theEmployee={theEmployee} monthName={months} monthSet={month}/>
+            <div className="form-group" style={{textAlign: "right"}}>
+                <button variant="success" type="submit" block="true" onClick={editKpi}>
+                    Edit KPI
+                </button>
+            </div>
+        </div>                
     )
 
 }
