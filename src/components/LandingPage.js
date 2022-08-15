@@ -40,7 +40,7 @@ const LandingPage = () => {
       let userId = users.filter(user => {if (user.role === roleId[0].role_id) {return user.id}})
   
       axios
-      .get(`http://127.0.0.1:8000/bsc/kpi/${userId[0].id}/`)
+      .get(`https://pms-apis.herokuapp.com/bsc/kpi/${userId[0].id}/`)
       .then(response => {
         if (response.status === 200){
           changeKPIs(response.data)
@@ -66,7 +66,7 @@ const LandingPage = () => {
     let userId = users.filter(user => {if (user.department === e.target.value && user.subdepartment === null){return user.id}})
     
     axios 
-    .get(`http://127.0.0.1:8000/bsc/kpi/${userId[0].id}/`)
+    .get(`https://pms-apis.herokuapp.com/bsc/kpi/${userId[0].id}/`)
     .then(response => {
       if (response.status === 200){
         changeKPIs(response.data)
@@ -95,8 +95,9 @@ const LandingPage = () => {
   const getSubProcessKPI = (e) => {
     setLoading(true)
     let userId = users.filter(user => {if (user.subdepartment === parseInt(e.target.value) && user.sub_subdepartment === null){return user.id}})
+    console.log(userId)
     axios 
-    .get(`http://127.0.0.1:8000/bsc/kpi/${userId[0].id}/`)
+    .get(`https://pms-apis.herokuapp.com/bsc/kpi/${userId[0].id}/`)
     .then(response => {
       if (response.status === 200){
         changeKPIs(response.data)
@@ -165,7 +166,7 @@ const LandingPage = () => {
   const getGradesKPI = (val) => {
     setLoading(true)
     axios 
-    .get(`http://127.0.0.1:8000/bsc/kpi/${val}}/`)
+    .get(`https://pms-apis.herokuapp.com/bsc/kpi/${val}}/`)
     .then(response => {
       if (response.status === 200){
         changeKPIs(response.data)

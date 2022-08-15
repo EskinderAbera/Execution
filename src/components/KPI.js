@@ -17,8 +17,8 @@ const KPI = ({kpi}) => {
 
     return (
     <>
-        <td>{kpi.perspective}</td>
-        <td>{kpi.objective}</td>
+        <td>{kpi.perspective_name}</td>
+        <td>{kpi.objective_name}</td>
         <td>{kpi.kpi_name}</td>
         <td>{kpi.kpi_weight.toFixed(2)}</td>
         <td>{ kpi.kpi_unit_measurement === "Percentage" ? kpi.kpi_target.toFixed(2) : kpi.kpi_target }</td>
