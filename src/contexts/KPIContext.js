@@ -11,6 +11,38 @@ export function APIContextProvider({ children }) {
   const [numberofMonthsLeft, setNumberofMonthsLeft] = useState(0);
   const [base, setBase] = useState("")
   const [department, setDepartment] = useState('')
+  const [depts, setDepts] = useState([])
+  const [roles, setRole] = useState([])
+  const [subdepts, setSubDepts] = useState([])
+  const [subSubDepts, setSubSubDepts] = useState([])
+  const [users, setUsers] = useState([])
+
+const fetchData = async () => {
+    const getDepts = await axios.get(
+      `https://pms-apis.herokuapp.com/core/department/`
+      )
+    const getRole = await axios.get(
+      `https://pms-apis.herokuapp.com/core/role/`
+    )
+    const getSubDept = await axios.get(
+      `https://pms-apis.herokuapp.com/core/subdepartment/`
+    )
+    const getSubSubDept = await axios.get(
+      `https://pms-apis.herokuapp.com/core/subsub/`
+    )
+    setDepts(getDepts.data)
+    setRole(getRole.data)
+    setSubDepts(getSubDept.data)
+    setSubSubDepts(getSubSubDept.data)
+}
+
+useEffect(() => {
+    fetchData()
+  }, []);
+
+  const changeUsers = (users) => {
+    setUsers(users)
+  }
 
   const changeBase = (dept) => {
     setBase(dept)
@@ -80,7 +112,13 @@ export function APIContextProvider({ children }) {
         changeBase,
         base,
         changeDepartment,
-        department
+        department,
+        roles,
+        subdepts,
+        depts,
+        changeUsers,
+        users,
+        subSubDepts
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAPI } from "../contexts/KPIContext";
 import './LandingPage.css';
 import hailes from '../resources/images/hailes_cleanup.jpg'
@@ -6,10 +6,9 @@ import loader from '../resources/images/loader.gif'
 import coop from '../resources/images/coop.png'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { baseUrl, url } from "./Constants";
 import { bounce, fadeIn } from 'react-animations';
 import styled, { keyframes } from 'styled-components'
-import handleDarkMood from "./dakMood";
+import Select from "react-select";
 
 const Bounce = styled.div`animation: 2s ${keyframes `${bounce}`} infinite`;
 const FadeIn = styled.div`animation: 2s ${keyframes `${fadeIn}`} infinite`;
@@ -17,97 +16,177 @@ const FadeIn = styled.div`animation: 2s ${keyframes `${fadeIn}`} infinite`;
 const LandingPage = () => {
 
   let navigate = useNavigate();
-  const { changeKPIs, changeBase, changeDepartment, department} = useAPI();
+  const { changeKPIs, depts, roles, subdepts, users, subSubDepts} = useAPI();
   const [loading, setLoading] = useState(false)
+  const [process, setProcess] = useState(false)
+  const [subProcess, setSubProcess] = useState(false)
+  const [subSubProcess, setSubSubProcess] = useState(false)
+  const [dept, setSubDept] = useState('')
+  const [isDirector, setIsDirector] = useState(false)
+  const [isGrade, setIsGrade] = useState(false)
+  const [grades, setGrades] = useState('')
 
-  const handleDepartment = (e) => {
-    changeDepartment(e.target.value)
-  }
+  const handleRoleChange = (e) => {
+    setProcess(false)
+    setSubProcess(false)
+    setSubSubProcess(false)
+    setIsDirector(false)
+    setIsGrade(false)
+    setGrades('')
+
+    if (e.target.value === 'admin'){
+      setLoading(true)
+      let roleId = roles.filter(role => {if(role.role_name === e.target.value) {return role.role_id}})
+      let userId = users.filter(user => {if (user.role === roleId[0].role_id) {return user.id}})
   
-  const handleChange = (e) => {
-    const bases = e.target.value
-    changeBase(e.target.value)
-    setLoading(true)
-    
-    if(department === 'Director'){
       axios
-      .get(`${url}/director/kpi/${bases}/`)
-      .then((response) => {
-        if (response.status == 200) {
-            console.log(department)
-            changeKPIs(response.data)
-            navigate(`/kpi`);
-            setLoading(false)
+      .get(`http://127.0.0.1:8000/bsc/kpi/${userId[0].id}/`)
+      .then(response => {
+        if (response.status === 200){
+          changeKPIs(response.data)
+          setLoading(false)
+          navigate('/kpi')
         }
       })
-      .catch((error) => {
-          alert(error.response.data['Error']);
-          setLoading(false)
-      });
-    } else {
-        axios
-        .get(`${url}/${bases}/kpi/`)
-        .then((response) => {
-          if (response.status == 200) {
-              changeKPIs(response.data)
-              navigate(`/kpi`);
-              setLoading(false)
-          }
-        })
-        .catch((error) => {
-            alert(error.response.data['Error']);
-            setLoading(false)
-        });
+    } else if (e.target.value === 'Vice President'){
+      setProcess(true)
+    } else if(e.target.value === 'director'){
+      setSubProcess(true)
+    } else if(e.target.value === 'Manager'){
+      setSubSubProcess(true)
+    } else if(e.target.value === 'Individual'){
+      console.log('individual')
+    }else{
+      return
     }
+  }
+
+  const getProcessKPI = (e) => {
+    setLoading(true)
+    let userId = users.filter(user => {if (user.department === e.target.value && user.subdepartment === null){return user.id}})
+    
+    axios 
+    .get(`http://127.0.0.1:8000/bsc/kpi/${userId[0].id}/`)
+    .then(response => {
+      if (response.status === 200){
+        changeKPIs(response.data)
+        setLoading(false)
+        navigate('/kpi')
+      }
+    })
+  }
+
+  const ProcessDropDown = () => {
+    
+    return (
+      <select className="form-control selecting" onChange={(e) => getProcessKPI(e)}>
+        <option>Select...</option>
+        
+        {
+          depts && depts.length > 0 &&
+          depts.map(dept => 
+            <option key={dept.dept_id} value={dept.dept_id}>{dept.dept_name}</option>
+          )
+        }
+      </select>
+    )
+  }
+
+  const getSubProcessKPI = (e) => {
+    setLoading(true)
+    let userId = users.filter(user => {if (user.subdepartment === parseInt(e.target.value) && user.sub_subdepartment === null){return user.id}})
+    axios 
+    .get(`http://127.0.0.1:8000/bsc/kpi/${userId[0].id}/`)
+    .then(response => {
+      if (response.status === 200){
+        changeKPIs(response.data)
+        setLoading(false)
+        navigate('/kpi')
+      }
+    })
+  }
+  
+
+  const SubProcessList = () => {
+    return (
+      <select className="form-control selecting" onChange={(e) => getSubProcessKPI(e)}>
+        <option>Select...</option>
+        {
+          subdepts && subdepts.length > 0 &&
+          subdepts.filter(item => item.department === dept)
+          .map(subdept => 
+            <option key={subdept.id} value={subdept.id}>{subdept.name}</option>)
+        }
+      </select>
+    )
+  }
+
+  function handleSubProcess (e) {
+    setIsDirector(true)
+    setSubDept(e.target.value)
+  }
+
+  const SubProcessDropDown = () => {
+    
+    return (
+      <select className="form-control selecting" value={dept} onChange={(e) => handleSubProcess(e)}>
+        <option>Select...</option>
+        
+        {
+          depts && depts.length > 0 &&
+          depts.map(dept => 
+            <option key={dept.dept_id} value={dept.dept_id}>{dept.dept_name}</option>
+          )
+        }
+      </select>
+    )
+  }
+
+  const handleSubSubProcess = (e) => {
+    setGrades(e.target.value)
+    setIsGrade(true)
+  }
+
+  const SubSubProcessDropDown = () => {
+    return (
+      <select className="form-control selecting" value={grades} onChange={(e) => handleSubSubProcess(e)}>
+        <option>Select...</option>
+        
+        {
+          subSubDepts && subSubDepts.length > 0 &&
+          subSubDepts.map(subSubDept => 
+            <option key={subSubDept.id} value={subSubDept.id}>{subSubDept.name}</option>
+          )
+        }
+      </select>
+    )
+  }
+
+  const getGradesKPI = (val) => {
+    setLoading(true)
+    axios 
+    .get(`http://127.0.0.1:8000/bsc/kpi/${val}}/`)
+    .then(response => {
+      if (response.status === 200){
+        changeKPIs(response.data)
+        setLoading(false)
+        navigate('/kpi')
+      }
+    })
   } 
 
-  const Dropdown = () => {
-    if (department === 'Vice President'){
-      return (
-        <div className="form-group">
-          <select id='KPI' className="form-control selecting" onChange={(e)=>handleChange(e)}>
-            <option>Select....</option>
-            <option value="bsc">President Level Scorecard</option>
-            {/* <option value="operation">Banking Operation Process</option> */}
-            {/* <option value="corporate">Corporate Banking Operation</option> */}
-            {/* <option value="cooperative">Cooperative Banking Operation</option> */}
-            {/* <option value="credit">Credit Appraisal Process</option> */}
-            {/* <option value="finance">Finance and Facility Process</option> */}
-            {/* <option value="hc">HC and Projects Management</option> */}
-            {/* <option value="internal">Internal Audit Process</option> */}
-            {/* <option value="ifb">IFB Process</option> */}
-            {/* <option value="legal">Legal Services</option> */}
-            <option value="bod">BOD Secretary</option>
-            {/* <option value="risk">Risk and Compliance</option> */}
-            {/* <option value="strategy">Strategy and Marketing</option> */}
-            {/* <option value="tech">Tech and Digital Process</option> */}
-          </select>
-        </div>
-      )
-    } else if(department === 'Director'){
-      return (
-        <div className="form-group">
-          <select id='KPI' className="form-control selecting" onChange={(e)=>handleChange(e)}>
-            <option>Select....</option>
-            {/* <option value="bsc">corporate</option> */}
-            <option value="cooperativesdirector">Cooperatives Customers Relationship Management</option>
-            <option value="agriculturaldirector">Agricultural Banking Customers Relationship Management </option>
-            <option value="cooperativedirector">Cooperative and Agricultural banking Capacity Building and Advisory Services </option>
-            <option value="operationsdirector">Operations and Business Support</option>
-            <option value="customerdirector">Customer Experience</option>
-            <option value="districtdirector">District Office</option>
-            <option value="strategydirector">Strategy Management and Transformation</option>
-            <option value="performancedirector">Performance Monitoring and Change Management</option>
-            <option value="marketdirector">Market Research and Business Communications </option>
-          </select>
-        </div>
-      )
-    }
+  const GradeProcessList = () => {
+    return (
+      <Select
+        options={users.filter(user => user.sub_subdepartment === parseInt(grades)).map(opt => ({label: opt.username, value: opt.id}))}
+        onChange={opt => getGradesKPI(opt.value)}
+      />
+    )
   }
 
   return (
     <main>
-      {loading ? <div className="loader-landing"> <img className="img-loader big-wrapper" src={loader}/></div>:
+      {loading ? <div className="loader-landing"> <img className="img-loader big-wrapper" src={loader} alt="pic"/></div>:
         <div className="big-wrapper light">
         <>
           <header>
@@ -131,16 +210,26 @@ const LandingPage = () => {
                 </FadeIn>
                 <div className="cta">
                   <div className="form-group">
-                    <select id='KPI' className="form-control selecting" onChange={(e)=>handleDepartment(e)}>
+                    <select id='KPI' className="form-control selecting" onChange={(e) => handleRoleChange(e)}>
                       <option>Select....</option>
-                      <option>President</option>
-                      <option>Vice President</option>
-                      <option>Director</option>
+                      {
+                        ( roles && roles.length > 0 ) ? 
+                        roles.
+                        map((role, index) => (
+                          <option key = {role.role_id} value={role.role_name}>
+                            {role.role_name}
+                          </option>
+                        )) : null
+                      }
                     </select>
                   </div>
-                </div>
-                <div className="cta">
-                  <Dropdown />
+                  <div className="form-group">
+                    {process && <ProcessDropDown /> }
+                    {subProcess && <SubProcessDropDown /> } <br />
+                    {subSubProcess && <SubSubProcessDropDown />} 
+                    {isDirector && <SubProcessList />} <br />
+                    {isGrade && <GradeProcessList />} <br />
+                  </div>
                 </div>
               </div>
 
