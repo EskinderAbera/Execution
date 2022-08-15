@@ -1,7 +1,7 @@
 import { useAPI } from "../contexts/KPIContext";
 import { useState, useRef } from 'react';
 import axios from "axios";
-import { baseUrl, url } from "./Constants";
+import { url } from "./Constants";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Months from "./months";
@@ -65,14 +65,6 @@ const EditForm = ({theEmployee}) => {
     
     const handleSuccess = (data) => {
         changeMonth("");
-        // async function fetchData() {
-            //     const { data } = await axios.get(
-                //       `https://bsc-newapi.herokuapp.com/bsc/kpi/`
-                //     );
-                //     setKpis(data);
-                //     setLoading(false);
-                //   }
-                //   fetchData();
         <div>
             {toast.info("You have edited KPI Successfully!")
             };
@@ -194,6 +186,7 @@ const EditForm = ({theEmployee}) => {
         <div>
             <Months theEmployee={theEmployee} monthName={months} monthSet={month}/>
             <div className="form-group" style={{textAlign: "right"}}>
+
             {load ? 
                 (
                   <Spinner
@@ -209,6 +202,7 @@ const EditForm = ({theEmployee}) => {
             }
             </div>
         </div>                      
+
     )
 
 }

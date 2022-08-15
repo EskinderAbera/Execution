@@ -2,8 +2,6 @@ import { useState, useEffect} from 'react';
 import { Modal, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import EditForm from './EditForm'
 import DetailForm from './DetailForm';
-import { useAPI } from "../contexts/KPIContext";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const KPI = ({kpi}) => {
@@ -11,23 +9,10 @@ const KPI = ({kpi}) => {
     const [showModal, setShowModal] = useState(false)
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-    const showDetail = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
-    const {deleteKpi,numberofMonthsLeft,changeNumberofMonthsLeft} = useAPI();
-
-
-    const handleDelete = (kpi_id) => {
-            {deleteKpi(kpi_id)}
-        <div>
-            {toast.info("You have deleted KPI Successfully!")};
-            <ToastContainer />
-        </div>
-    }
-    
+    const handleCloseModal = () => setShowModal(false);   
 
     useEffect(() => {
         handleClose()
-        // changeNumberofMonthsLeft(kpi.kpi_months_left);
     }, [kpi])
 
     return (
@@ -39,16 +24,6 @@ const KPI = ({kpi}) => {
         <td>{ kpi.kpi_unit_measurement === "Percentage" ? kpi.kpi_target.toFixed(2) : kpi.kpi_target }</td>
         <td>
             <div style={{display:"flex", flexDirection:"row" }}>
-
-            {/* <OverlayTrigger
-                overlay={
-                    <Tooltip id={`tooltip-top`}>
-                    Detail
-                    </Tooltip>
-                }>
-                <button onClick={showDetail} className="btn  btn-act row" data-toggle="modal"><i className="material-symbols-outlined">visibility</i></button>
-            </OverlayTrigger> */}
-
             <OverlayTrigger
                 overlay={
                     <Tooltip id={`tooltip-top`}>

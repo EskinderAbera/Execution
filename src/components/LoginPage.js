@@ -2,18 +2,27 @@ import React from "react"
 import { useState } from "react";
 import './Login.css'
 import axios from "axios";
-import { baseUrl, url } from "./Constants";
+import { url } from "./Constants";
 import { useNavigate } from "react-router-dom";
 import loader from '../resources/images/loader.gif'
+import { useAPI } from "../contexts/KPIContext";
 
 export default function LoginPage ({setIsLoggedIn}) {
 
   let navigate = useNavigate();
+  const { changeUsers } = useAPI();
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isInValid, setIsInValid] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const fetchData = async () => {
+    const getUsers = await axios.get(
+      `https://pms-apis.herokuapp.com/core/users/`
+      )
+    changeUsers(getUsers.data)
+}
 
   const submitForm = async (e) => {  
     e.preventDefault();
@@ -28,7 +37,8 @@ export default function LoginPage ({setIsLoggedIn}) {
       axios
       .post(`${url}/core/other/login/`, datas)
       .then((response) => {
-          if (response.status == 200) {
+          if (response.status === 200) {
+            fetchData();
             navigate(`/landing`);
             setIsLoggedIn(true)
           }
@@ -42,7 +52,7 @@ export default function LoginPage ({setIsLoggedIn}) {
           
   return (
     <div className="Auth-form-container">
-      { loading ? <div className="loader-landing"> <img className="img-loader big-wrapper" src={loader}/></div>: 
+      { loading ? <div className="loader-landing"> <img className="img-loader big-wrapper" alt="pic" src={loader}/></div>: 
         <form className="Auth-form" onSubmit={submitForm}>
           <div className="Auth-form-content">
             <h3 className="Auth-form-title">Sign In</h3>
@@ -71,7 +81,8 @@ export default function LoginPage ({setIsLoggedIn}) {
               </button>
             </div>
             <p className="forgot-password text-right mt-2">
-              Forgot <a href="#">password?</a>
+              {/* Forgot <a href="#">password?</a> */}
+              Forgot Password?
             </p>
           </div>
         </form>
