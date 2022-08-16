@@ -16,7 +16,7 @@ const FadeIn = styled.div`animation: 2s ${keyframes `${fadeIn}`} infinite`;
 const LandingPage = () => {
 
   let navigate = useNavigate();
-  const { changeKPIs, depts, roles, subdepts, users, subSubDepts} = useAPI();
+  const { changeKPIs, depts, roles, subdepts, users, subSubDepts, individuals} = useAPI();
   const [loading, setLoading] = useState(false)
   const [process, setProcess] = useState(false)
   const [subProcess, setSubProcess] = useState(false)
@@ -25,6 +25,7 @@ const LandingPage = () => {
   const [isDirector, setIsDirector] = useState(false)
   const [isGrade, setIsGrade] = useState(false)
   const [grades, setGrades] = useState('')
+  const [isIndividual, setIsIndividual] = useState(false)
 
   const handleRoleChange = (e) => {
     setProcess(false)
@@ -33,6 +34,7 @@ const LandingPage = () => {
     setIsDirector(false)
     setIsGrade(false)
     setGrades('')
+    setIsIndividual(false)
 
     if (e.target.value === 'admin'){
       setLoading(true)
@@ -54,8 +56,8 @@ const LandingPage = () => {
       setSubProcess(true)
     } else if(e.target.value === 'Manager'){
       setSubSubProcess(true)
-    } else if(e.target.value === 'Individual'){
-      console.log('individual')
+    } else if(e.target.value === 'Individuals'){
+      setIsIndividual(true)
     }else{
       return
     }
@@ -95,7 +97,6 @@ const LandingPage = () => {
   const getSubProcessKPI = (e) => {
     setLoading(true)
     let userId = users.filter(user => {if (user.subdepartment === parseInt(e.target.value) && user.sub_subdepartment === null){return user.id}})
-    console.log(userId)
     axios 
     .get(`https://pms-apis.herokuapp.com/bsc/kpi/${userId[0].id}/`)
     .then(response => {
@@ -185,6 +186,15 @@ const LandingPage = () => {
     )
   }
 
+  const IndividualDropDown = () => {
+    return (
+      <Select
+        options={users.map(opt => ({label: opt.username, value: opt.id}))}
+        onChange = {opt => getGradesKPI(opt.value)}
+      />
+    )
+  }
+
   return (
     <main>
       {loading ? <div className="loader-landing"> <img className="img-loader big-wrapper" src={loader} alt="pic"/></div>:
@@ -226,11 +236,22 @@ const LandingPage = () => {
                   </div>
                   <div className="form-group">
                     {process && <ProcessDropDown /> }
-                    {subProcess && <SubProcessDropDown /> } <br />
-                    {subSubProcess && <SubSubProcessDropDown />} 
-                    {isDirector && <SubProcessList />} <br />
-                    {isGrade && <GradeProcessList />} <br />
                   </div>
+                  <div className="form-group"> 
+                    {subProcess && <SubProcessDropDown /> }
+                  </div>
+                  <div className="form-group">
+                    {subSubProcess && <SubSubProcessDropDown />} 
+                  </div>
+                  <div className="form-group">
+                    {isDirector && <SubProcessList />}
+                  </div>
+                  <div className="form-group"> 
+                    {isGrade && <GradeProcessList />}
+                  </div>
+                  <div className="form-group">
+                    {isIndividual && <IndividualDropDown />}
+                  </div>  
                 </div>
               </div>
 

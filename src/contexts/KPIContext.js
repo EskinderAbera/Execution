@@ -18,22 +18,22 @@ export function APIContextProvider({ children }) {
   const [users, setUsers] = useState([])
 
 const fetchData = async () => {
-    const getDepts = await axios.get(
-      `https://pms-apis.herokuapp.com/core/department/`
-      )
-    const getRole = await axios.get(
-      `https://pms-apis.herokuapp.com/core/role/`
+  const getDepts = await axios.get(
+    `https://pms-apis.herokuapp.com/core/department/`
     )
-    const getSubDept = await axios.get(
-      `https://pms-apis.herokuapp.com/core/subdepartment/`
-    )
-    const getSubSubDept = await axios.get(
-      `https://pms-apis.herokuapp.com/core/subsub/`
-    )
-    setDepts(getDepts.data)
-    setRole(getRole.data)
-    setSubDepts(getSubDept.data)
-    setSubSubDepts(getSubSubDept.data)
+  const getRole = await axios.get(
+    `https://pms-apis.herokuapp.com/core/role/`
+  )
+  const getSubDept = await axios.get(
+    `https://pms-apis.herokuapp.com/core/subdepartment/`
+  )
+  const getSubSubDept = await axios.get(
+    `https://pms-apis.herokuapp.com/core/subsub/`
+  )
+  setDepts(getDepts.data)
+  setRole(getRole.data)
+  setSubDepts(getSubDept.data)
+  setSubSubDepts(getSubSubDept.data)
 }
 
 useEffect(() => {
@@ -63,19 +63,6 @@ useEffect(() => {
     })
     setKpis(KPIs)
   }
-
-  // useEffect(() => {
-    
-  //   async function fetchData() {
-  //     const { data } = await axios.get(
-  //       `https://bsc-newapi.herokuapp.com/bsc/kpi/`
-  //       `http://localhost:8000/bsc/kpi/`
-  //     );
-  //     setKpis(data);
-  //     setLoading(false);
-  //   }
-  //   fetchData();
-  // }, []);
 
   const changeNumberofMonthsLeft = (number) => {
     setNumberofMonthsLeft(number);
