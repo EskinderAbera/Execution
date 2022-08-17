@@ -5,10 +5,13 @@ import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 import Protected from "./components/Protected";
 import { useState } from "react";
+import CheckConnection from "./components/CheckConnection";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  
   return (  
+    <CheckConnection>
       <APIContextProvider>
         <Router>
           <Routes>
@@ -18,8 +21,9 @@ function App() {
             <Route path="/kpi" element = {<Protected isLoggedIn={isLoggedIn}><KPIList /></Protected>}></Route>
           </Routes>
         </Router>
-        </APIContextProvider>    
-  );
+      </APIContextProvider>   
+    </CheckConnection>
+    )
 }
 
 export default App;

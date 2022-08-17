@@ -189,7 +189,7 @@ const LandingPage = () => {
   const IndividualDropDown = () => {
     return (
       <Select
-        options={users.map(opt => ({label: opt.username, value: opt.id}))}
+        options={users.filter(user => user.individuals !== null).map(opt => ({label: opt.username, value: opt.id}))}
         onChange = {opt => getGradesKPI(opt.value)}
       />
     )

@@ -18,22 +18,26 @@ export function APIContextProvider({ children }) {
   const [users, setUsers] = useState([])
 
 const fetchData = async () => {
-  const getDepts = await axios.get(
-    `https://pms-apis.herokuapp.com/core/department/`
+  try {
+    const getDepts = await axios.get(
+      `https://pms-apis.herokuapp.com/core/department/`
+      )
+    const getRole = await axios.get(
+      `https://pms-apis.herokuapp.com/core/role/`
     )
-  const getRole = await axios.get(
-    `https://pms-apis.herokuapp.com/core/role/`
-  )
-  const getSubDept = await axios.get(
-    `https://pms-apis.herokuapp.com/core/subdepartment/`
-  )
-  const getSubSubDept = await axios.get(
-    `https://pms-apis.herokuapp.com/core/subsub/`
-  )
-  setDepts(getDepts.data)
-  setRole(getRole.data)
-  setSubDepts(getSubDept.data)
-  setSubSubDepts(getSubSubDept.data)
+    const getSubDept = await axios.get(
+      `https://pms-apis.herokuapp.com/core/subdepartment/`
+    )
+    const getSubSubDept = await axios.get(
+      `https://pms-apis.herokuapp.com/core/subsub/`
+    )
+    setDepts(getDepts.data)
+    setRole(getRole.data)
+    setSubDepts(getSubDept.data)
+    setSubSubDepts(getSubSubDept.data)
+  } catch(e) {
+    console.log(e)
+  }
 }
 
 useEffect(() => {
