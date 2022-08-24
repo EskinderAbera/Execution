@@ -10,13 +10,13 @@ import { bounce, fadeIn } from 'react-animations';
 import styled, { keyframes } from 'styled-components'
 import Select from "react-select";
 
-const Bounce = styled.div`animation: 2s ${keyframes `${bounce}`} infinite`;
+// const Bounce = styled.div`animation: 2s ${keyframes `${bounce}`} infinite`;
 const FadeIn = styled.div`animation: 2s ${keyframes `${fadeIn}`} infinite`;
 
 const LandingPage = () => {
 
   let navigate = useNavigate();
-  const { changeKPIs, depts, roles, subdepts, users, subSubDepts, individuals} = useAPI();
+  const { changeKPIs, depts, roles, subdepts, users, subSubDepts } = useAPI();
   const [loading, setLoading] = useState(false)
   const [process, setProcess] = useState(false)
   const [subProcess, setSubProcess] = useState(false)
@@ -180,7 +180,7 @@ const LandingPage = () => {
   const GradeProcessList = () => {
     return (
       <Select
-        options={users.filter(user => user.sub_subdepartment === parseInt(grades)).map(opt => ({label: opt.username, value: opt.id}))}
+        options={users.filter(user => user.sub_subdepartment === parseInt(grades) && user.individuals === null).map(opt => ({label: opt.username, value: opt.id}))}
         onChange={opt => getGradesKPI(opt.value)}
       />
     )
@@ -203,7 +203,7 @@ const LandingPage = () => {
           <header>
             <div className="container">
               <div className="logo">
-                <Bounce><img src={coop} alt="Logo" /></Bounce>
+                <img src={coop} alt="Logo" />
               </div>
             </div>
           </header>
@@ -212,7 +212,7 @@ const LandingPage = () => {
             <div className="container">
               <div className="left">
                 <div className="big-title">
-                  <Bounce><h1>Planning DashBoard</h1></Bounce>
+                    <h1>Execution DashBoard</h1>
                   <h1>Start Exploring now.</h1>
                 </div>
                 <FadeIn><p className="text">
@@ -246,10 +246,10 @@ const LandingPage = () => {
                   <div className="form-group">
                     {isDirector && <SubProcessList />}
                   </div>
-                  <div className="form-group"> 
+                  <div className="form-group grade" > 
                     {isGrade && <GradeProcessList />}
                   </div>
-                  <div className="form-group">
+                  <div className="form-group grade">
                     {isIndividual && <IndividualDropDown />}
                   </div>  
                 </div>

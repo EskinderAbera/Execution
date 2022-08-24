@@ -289,6 +289,10 @@ header .container {
   opacity: 0.1;
 }
 
+.grade {
+  margin-right: 280px;
+}
+
 .copy {
   position: absolute;
   top: 0;
