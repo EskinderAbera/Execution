@@ -79,7 +79,6 @@ const LandingPage = () => {
   }
 
   const ProcessDropDown = () => {
-    
     return (
       <select className="form-control selecting" onChange={(e) => getProcessKPI(e)}>
         <option>Select...</option>
@@ -213,7 +212,7 @@ const LandingPage = () => {
               <div className="left">
                 <div className="big-title">
                     <h1>Execution DashBoard</h1>
-                  <h1>Start Exploring now.</h1>
+                  {/* <h1>Start Exploring now.</h1> */}
                 </div>
                 <FadeIn><p className="text">
                 "To be the leading private bank in 2025"

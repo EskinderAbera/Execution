@@ -1,6 +1,6 @@
 import KPIList from "./components/KPIList";
 import { APIContextProvider } from './contexts/KPIContext';
-import { BrowserRouter as Router,Routes, Route, Link, Navigate} from 'react-router-dom';
+import { BrowserRouter as Router,Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 import Protected from "./components/Protected";

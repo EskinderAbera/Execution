@@ -80,10 +80,10 @@ export default function LoginPage ({setIsLoggedIn}) {
                 Submit
               </button>
             </div>
-            <p className="forgot-password text-right mt-2">
-              {/* Forgot <a href="#">password?</a> */}
+            {/* <p className="forgot-password text-right mt-2">
+              Forgot <a href="#">password?</a>
               Forgot Password?
-            </p>
+            </p> */}
           </div>
         </form>
       }
